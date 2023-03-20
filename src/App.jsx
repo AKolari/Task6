@@ -12,7 +12,7 @@ function App() {
   
 return <div className="min-h-screen relative">
     <Header />
-    <Container className=" h-90 ">
+    <Container className=" h-full bg-amber-50 pb-30">
         <Routes>
             <Route index element={<Home />}></Route>
             <Route path="/about" element={<About />}></Route>
@@ -22,7 +22,7 @@ return <div className="min-h-screen relative">
 
         </Routes>
     </Container>
-    <div className="absolute inset-x-0 bottom-0 mt-20">
+    <div className="absolute inset-x-0 bottom-0 ">
     <Footer />
     </div>
 

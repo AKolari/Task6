@@ -1,6 +1,7 @@
 import Container from '../components/Container';
 import {useParams} from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import useBookAPI from '../hooks/useBookAPI';
 
 
 import ErrorAlert from '../components/ErrorAlert';
@@ -10,35 +11,12 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import 'react-loading-skeleton/dist/skeleton.css'
 
 const Book = () => {
-
-
-    const [books, setBooks] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-
-    const getData = async () => {
-        const url = `https://api.matgargano.com/api/books/${params.id}`;
-        setLoading(true);
-        setError(false);
-        try {
-            const request = await fetch(url);
-            const response = await request.json();
-            setBooks(response);
-            console.log(books)
-           
-        } catch(e) {
-            setError('Error: ' + e.message);
-        } finally {
-            setLoading(false);
-        } 
-    }
-
-    useEffect(() => {
-        getData(); 
-    }, []);
-
-
     const params = useParams();
+    const [book, setBook, loading, setLoading, error, setError]= useBookAPI(`https://api.matgargano.com/api/books/${params.id}`)
+
+
+
+    
 
     return (<Container className="h-5/6" >
 
@@ -46,12 +24,14 @@ const Book = () => {
             {error && <ErrorAlert>{error}</ErrorAlert>}
             {!error && loading && <div className="max-w-[230px]"><Skeleton count="10" /></div>}
             {!error && !loading && 
-            <img className="rounded-xl border-2 border-zinc-900" src={books.imageURL}></img>
+            <img className="rounded-l-xl border-2 border-zinc-900" src={book.imageURL}></img>
             }
-            <div className="flex flex-col justify-center items-center w-full ">
-            <h1 className='text-5xl flex  text-center text-white'>{books.title}</h1>
+            <div className="flex flex-col relative justify-center items-center w-full ">
+            <h1 className='text-5xl italic flex  text-center text-white'>{book.title}</h1>
             
-            <h2 className='text-xl flex  text-center text-white'>{books.author}</h2>
+            <h2 className='text-xl flex  text-center text-white'>{book.author}</h2>
+            <p className='text-s flex  italic absolute  bottom-0 text-right text-white '>{book.pages} Pages. Published in {book.year} by {book.publisher} </p>
+            
 
             </div>
             
